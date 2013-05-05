@@ -1,8 +1,6 @@
 arduino_due_blank_eclipse
 =========================
 
-NOTE: Broken - needs more work - see TODO section
-
 This is an Eclipse project to be used as a base for any Arduino Due
 software. It includes a pre-built arduino core for the Arduino Due,
 a pre-built Atmel library for the Due's processor and all necessary
@@ -73,13 +71,11 @@ there that doesn't include exception support?
 TODO
 ====
 
-- BUG: Using any standard library functions or anything that drags them in breaks the
-  binary (ie. it doesn't run on the Arduino). This is due to the linker not finding
-  syscalls. They're in the Arduino core library so I'm not sure why it can't 
-  find them. 
-- Extract syscalls from Arduino core library and add them to this project. They're 
-  causing linker warnings at the moment and it would be nice to make them 
-  user-configurable.
+- Figure out why arduino-1.5.2-syscalls_sam3.c.o is needed during linking. This
+  object is already within libarduino-1.5.2-core-Due.a, however the linker doesn't
+  seem to be able to find it - use malloc and the linker will complain that _sbrk()
+  is undefined.
+- Extract syscalls from Arduino core library and add them to this project.
 - Write Windows batch file for uploading to the Arduino
 - See if exceptions are supported in user code
 - See if any existing pre-built toolchains do not include exception support
