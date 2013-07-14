@@ -22,9 +22,8 @@ Before you can build
   case, I added C:\arduino-1.5.2\hardware\tools\g++_arm_none_eabi\bin to 
   Windows' PATH variable.
 - Also make sure make is in PATH
-- Finally, modify the upload.sh script to suit your system. This script 
-  uploads the project to the Arduino Due). I'll make a Windows script 
-  at some point
+- Finally, modify the upload.sh/upload.bat script to suit your system. These 
+  scripts upload the project to the Arduino Due.
   
 NOTE:
 The arguments to the gcc compilers and linker are slightly different to those
@@ -38,9 +37,9 @@ Alternatives to using Arduino SDK
 =================================
 
 This project currently requires the Arduino SDK for its ARM toolchain and 
-bossa flashing tool. These can both be obtained separately:
-
-- Bossa: http://www.shumatech.com/web/products/bossa
+bossa flashing tool. The regular bossa flashing tool 
+(http://www.shumatech.com/web/products/bossa) doesn't work, you need to 
+use arduino's version.
 
 - ARM toolchains:
  - Mentor Graphics Sourcery CodeBench Lite Edition
@@ -59,13 +58,13 @@ Exceptions support
 ==================
 
 Although the Arduino IDE builds user code with the -fno-exceptions flag, exception
-handling seems to be supported by the toolchain. (Try adding static int i = SystemCoreClock;
-to a function and watch your binary size explode by about 60kB - I'm pretty sure
-that's standard library exception handling support code being included.)
-
-I've never used exceptions in an embedded system before, but might be worth giving
-it a go! Otherwise that 60kB is going to waste. Is there a free pre-built toolchain out 
-there that doesn't include exception support?
+handling is supported by the toolchain. You can use C++ exceptions by removing the
+above flag. The arduino toolchain's c library supports exceptions, so even if you 
+don't use them, using some parts of the standard library will drag in exception
+handling code (around 60kB). If you don't want this, you'll have to use another
+toolchain. The only one I've found that has a standard library built without
+exceptions support is Linaro (GCC ARM Embedded 4.7-2013-q1-update, using linker arg 
+--specs=nano or something like that).
 
 
 TODO
@@ -76,6 +75,3 @@ TODO
   seem to be able to find it - use malloc and the linker will complain that _sbrk()
   is undefined.
 - Extract syscalls from Arduino core library and add them to this project.
-- Write Windows batch file for uploading to the Arduino
-- See if exceptions are supported in user code
-- See if any existing pre-built toolchains do not include exception support
