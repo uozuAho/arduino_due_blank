@@ -8,14 +8,14 @@
 #include "Arduino.h"
 
 #ifdef __cplusplus
-    #define C_INCLUDE_BEGIN   extern "C" {
-    #define C_INCLUDE_END     }
+    #define C_BLOCK_BEGIN   extern "C" {
+    #define C_BLOCK_END     }
 #else
-    #define C_INCLUDE_BEGIN
-    #define C_INCLUDE_END
+    #define C_BLOCK_BEGIN
+    #define C_BLOCK_END
 #endif
 
-C_INCLUDE_BEGIN
+C_BLOCK_BEGIN
     #include "unity.h"
     #include "unity_fixture.h"
 
@@ -23,12 +23,11 @@ C_INCLUDE_BEGIN
     int ArduinoPutchar(int c) {
         return Serial.print((char)c);
     }
-C_INCLUDE_END
 
-
-// Forward declaration of all tests - requires
-// unit tests to be built and linked
-extern void RunAllTests(void);
+    // Forward declaration of all tests - requires
+    // unit tests to be built and linked
+    void RunAllTests(void);
+C_BLOCK_END
 
 // Pin 13 has an LED connected on most Arduino boards.
 // give it a name:
