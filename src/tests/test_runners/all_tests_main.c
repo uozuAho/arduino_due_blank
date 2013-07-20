@@ -1,6 +1,6 @@
 #include "unity_fixture.h"
 
-extern void RunAllTests(void);
+void RunAllTests(void);
 
 int main(int argc, char* argv[])
 {

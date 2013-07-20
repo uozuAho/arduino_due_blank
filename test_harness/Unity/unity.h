@@ -9,6 +9,7 @@
 
 #define UNITY
 
+#include "unity_conf.h"
 #include "unity_internals.h"
 
 //-------------------------------------------------------

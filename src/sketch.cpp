@@ -18,7 +18,13 @@
 C_INCLUDE_BEGIN
     #include "unity.h"
     #include "unity_fixture.h"
+
+    // Unity can't use cpp functions
+    int ArduinoPutchar(int c) {
+        return Serial.print((char)c);
+    }
 C_INCLUDE_END
+
 
 // Forward declaration of all tests - requires
 // unit tests to be built and linked
