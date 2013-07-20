@@ -7,6 +7,23 @@
 
 #include "Arduino.h"
 
+#ifdef __cplusplus
+    #define C_INCLUDE_BEGIN   extern "C" {
+    #define C_INCLUDE_END     }
+#else
+    #define C_INCLUDE_BEGIN
+    #define C_INCLUDE_END
+#endif
+
+C_INCLUDE_BEGIN
+    #include "unity.h"
+    #include "unity_fixture.h"
+C_INCLUDE_END
+
+// Forward declaration of all tests - requires
+// unit tests to be built and linked
+extern void RunAllTests(void);
+
 // Pin 13 has an LED connected on most Arduino boards.
 // give it a name:
 int led = 13;
@@ -15,6 +32,7 @@ int led = 13;
 void setup() {
     // initialize the digital pin as an output.
     pinMode(led, OUTPUT);
+    Serial.begin(9600);
 }
 
 // the loop routine runs over and over again forever:
@@ -23,4 +41,6 @@ void loop() {
     delay(1000);               // wait for a second
     digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
     delay(1000);               // wait for a second
+
+    UnityMain(0, NULL, RunAllTests);
 }
