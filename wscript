@@ -22,11 +22,14 @@ VERSION = VERSION_STRING
 # ---------------------------------------------
 # Utility functions
 
+import os
+
 # redundant...just use ant_glob
 def getAllSourceFiles(ctx):
     return ctx.path.ant_glob(incl = ['src/**/*.c',
                                      'test_harness/**/*.c'],
                              excl = ['sketch.cpp'])
+
 
 # ---------------------------------------------
 # waf instructions
@@ -38,8 +41,25 @@ def options(ctx):
 def configure(ctx):
     ctx.load('compiler_c')
 
+
 def build(ctx):
+    # Generate unit test runners
+    genscripts = ctx.path.ant_glob('**/makeTestRunner.py')
+    if len(genscripts) == 1:
+        genscript = genscripts[0].abspath()
+    else:
+        raise Exception("len(genscripts) != 1")
+    tests_dir = os.path.abspath('src/tests')
+    test_runner = 'src/tests/_all_tests.c'
+
+    ctx(rule='python '+genscript+' '+tests_dir+' -o ${TGT}',
+        source = 'wscript',
+        target = test_runner)
+
+    # Build host unit test config
     sources = getAllSourceFiles(ctx)
+    if test_runner not in sources:
+        sources.append(test_runner)
 
     ctx.program(
         source       = sources,
