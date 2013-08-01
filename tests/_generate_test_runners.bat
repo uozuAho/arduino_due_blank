@@ -1,7 +1,7 @@
 @echo off
 
 rem -----------------------------------------------------
-set GENERATOR="..\..\test_harness\Unity\scripts\makeTestRunner.py"
+set GENERATOR="..\test_harness\Unity\scripts\makeTestRunner.py"
 
 set TESTS_DIR="."
 
