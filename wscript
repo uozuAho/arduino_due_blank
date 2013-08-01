@@ -1,3 +1,7 @@
+""" Waf build script. Currently only supports unit test generation
+    and host unit test build configuration
+"""
+
 # Project constants
 PROJECT_NAME = 'ArduinoDue_blank'
 
@@ -49,11 +53,16 @@ def build(ctx):
         genscript = genscripts[0].abspath()
     else:
         raise Exception("len(genscripts) != 1")
+
     tests_dir = os.path.abspath('src/tests')
+    test_depends = ctx.path.ant_glob(incl = ['src/tests/*.c'])
+    test_depends.append(genscripts[0])
+    print(test_depends)
+
     test_runner = 'src/tests/_all_tests.c'
 
     ctx(rule='python '+genscript+' '+tests_dir+' -o ${TGT}',
-        source = 'wscript',
+        source = test_depends,
         target = test_runner)
 
     # Build host unit test config
