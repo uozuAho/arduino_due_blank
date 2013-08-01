@@ -1,0 +1,17 @@
+plan
+====
+
+Incrementally add all build configurations currently
+supported in Eclipse, using other build tools.
+---------------
+
+  - Add build tool files to build unit test host configuration.
+    - Cmake - DONE
+    - waf   - DONE
+    - Scons
+    - make
+
+  - Add a variant of the unit test host configuration, eg. with
+    an extra printout or similar
+
+  - Add a build configuration for the Arduino platform
