@@ -6,6 +6,7 @@
  */
 
 #include "Arduino.h"
+#include "my_static_lib.h"
 
 #ifdef __cplusplus
     #define C_BLOCK_BEGIN   extern "C" {
@@ -42,6 +43,8 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
+    MyStaticLib_vPrintTestMessage();
+
     digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
     delay(1000);               // wait for a second
     digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
