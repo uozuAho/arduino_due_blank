@@ -1,5 +1,7 @@
 Debug
 *~
 build
+waf_build
+make_build
 waf-*
 .lock-waf*
