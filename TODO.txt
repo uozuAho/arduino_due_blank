@@ -9,7 +9,7 @@ supported in Eclipse, using other build tools.
     - Cmake - DONE
     - waf   - DONE
     - Scons
-    - make
+    - make  - DONE
 
   - Add a variant of the unit test host configuration, eg. with
     an extra printout or similar
