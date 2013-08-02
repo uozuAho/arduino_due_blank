@@ -18,7 +18,7 @@ DEBUG = True
 
 # waf constants
 top = '.'
-out = 'build'
+out = 'waf_build'
 APPNAME = PROJECT_NAME
 VERSION = VERSION_STRING
 
@@ -26,17 +26,10 @@ VERSION = VERSION_STRING
 # ---------------------------------------------
 # Utility functions
 
-import os
-
-# redundant...just use ant_glob
-def getAllSourceFiles(ctx):
-    return ctx.path.ant_glob(incl = ['src/**/*.c',
-                                     'test_harness/**/*.c'],
-                             excl = ['sketch.cpp'])
-
 
 # ---------------------------------------------
 # waf instructions
+import os
 
 def options(ctx):
     ctx.load('compiler_c')
@@ -54,25 +47,27 @@ def build(ctx):
     else:
         raise Exception("len(genscripts) != 1")
 
-    tests_dir = os.path.abspath('src/tests')
-    test_depends = ctx.path.ant_glob(incl = ['src/tests/*.c'])
+    tests_dir = os.path.abspath('tests')
+    test_depends = ctx.path.ant_glob(incl = ['tests/*.c'])
     test_depends.append(genscripts[0])
-    print(test_depends)
-
-    test_runner = 'src/tests/_all_tests.c'
+    test_runner = 'tests/_all_tests.c'
 
     ctx(rule='python '+genscript+' '+tests_dir+' -o ${TGT}',
         source = test_depends,
         target = test_runner)
 
     # Build host unit test config
-    sources = getAllSourceFiles(ctx)
+    sources = ctx.path.ant_glob(incl = ['src/**/*.c',
+                                        'my_static_lib/**/*.c',
+                                        'tests/**/*.c',
+                                        'test_harness/**/*.c'],
+                                excl = ['sketch.cpp'])
     if test_runner not in sources:
         sources.append(test_runner)
 
     ctx.program(
         source       = sources,
-        target       = PROJECT_NAME+'-'+VERSION_STRING,
+        target       = PROJECT_NAME+'-'+VERSION_STRING+'-UnitTests_host',
 
         includes     = ["arduino_core/include",
                         "arduino_core/variants/arduino_due_x",
@@ -80,9 +75,10 @@ def build(ctx):
                         "device_libs/CMSIS/Device/ATMEL",
                         "device_libs/libsam",
                         "src",
+                        "my_static_lib",
                         "test_harness/Unity"],
 
-        defines      = ['RUN_UNIT_TESTS_HOST'],
+        defines      = ['TARGET_HOST'],
 
         lib          = ['m', 'gcc'],
         libpath      = [],
