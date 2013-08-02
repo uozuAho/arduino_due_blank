@@ -90,9 +90,14 @@ UNIT_TESTS_HOST_VARIANT_EXECUTABLE=ArduinoDue_blank-UnitTestHost_variant.exe
 # ------------------------------------------------------
 # Rules
 
-
 all: $(UNIT_TESTS_HOST_EXECUTABLE) $(UNIT_TESTS_HOST_VARIANT_EXECUTABLE)
 	echo "all"
+
+# ----------------------------
+# Rules from generated dependency files
+
+-include $(UNIT_TESTS_HOST_DEPENDS)
+-include $(UNIT_TESTS_HOST_VARIANT_DEPENDS)
 
 # ----------------------------
 # Test runner generator rules
@@ -109,10 +114,11 @@ $(UNIT_TESTS_HOST_EXECUTABLE): $(UNIT_TESTS_HOST_OBJECTS)
 	$(UNIT_TESTS_HOST_CC) $(UNIT_TESTS_HOST_LDFLAGS) -o $(UNIT_TESTS_HOST_BUILD_DIR)\$@ $(UNIT_TESTS_HOST_OBJECTS) -lm -lgcc
 
 $(UNIT_TESTS_HOST_OBJECTS): $(UNIT_TESTS_HOST_OBJ_DIR)\\%.o: %.c $(UNIT_TESTS_HOST_OBJ_DIR)\dummy.txt
-	$(UNIT_TESTS_HOST_CC) $(UNIT_TESTS_HOST_CFLAGS) -c $< -o $@
+	$(UNIT_TESTS_HOST_CC) $(UNIT_TESTS_HOST_CFLAGS) -c $< -MMD -MP -MF $(patsubst %.o,%.d,$@) -o $@
 
 $(UNIT_TESTS_HOST_OBJ_DIR)\dummy.txt:
 	python make_helpers\create_build_dirs.py $(UNIT_TESTS_HOST_OBJECTS)
+	echo "dummy"
 	echo "" > $(UNIT_TESTS_HOST_OBJ_DIR)\dummy.txt
 
 # ----------------------------
@@ -123,11 +129,14 @@ $(UNIT_TESTS_HOST_VARIANT_EXECUTABLE): $(UNIT_TESTS_HOST_VARIANT_OBJECTS)
 	$(UNIT_TESTS_HOST_VARIANT_CC) $(UNIT_TESTS_HOST_VARIANT_LDFLAGS) -o $(UNIT_TESTS_HOST_VARIANT_BUILD_DIR)\$@ $(UNIT_TESTS_HOST_VARIANT_OBJECTS) -lm -lgcc
 
 $(UNIT_TESTS_HOST_VARIANT_OBJECTS): $(UNIT_TESTS_HOST_VARIANT_OBJ_DIR)\\%.o: %.c $(UNIT_TESTS_HOST_VARIANT_OBJ_DIR)\dummy.txt
-	$(UNIT_TESTS_HOST_VARIANT_CC) $(UNIT_TESTS_HOST_VARIANT_CFLAGS) -c $< -o $@
+	$(UNIT_TESTS_HOST_VARIANT_CC) $(UNIT_TESTS_HOST_VARIANT_CFLAGS) -c $< -MMD -MP -MF $(patsubst %.o,%.d,$@) -o $@
 
 $(UNIT_TESTS_HOST_VARIANT_OBJ_DIR)\dummy.txt:
 	python make_helpers\create_build_dirs.py $(UNIT_TESTS_HOST_VARIANT_OBJECTS)
 	echo "" > $(UNIT_TESTS_HOST_VARIANT_OBJ_DIR)\dummy.txt
+
+
+
 
 clean:
 	del $(UNIT_TEST_RUNNER_SOURCE)
