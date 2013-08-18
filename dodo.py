@@ -13,7 +13,7 @@ BUILD_ROOT_DIR = 'doit_build'
 BUILD_ROOT_DIR_DUMMY_FILE = os.path.join(BUILD_ROOT_DIR, '.dummy')
 
 TEST_RUNNER_GENERATOR = os.path.join('test_harness', 'Unity', 'scripts', 'makeTestRunner.py')
-UNIT_TEST_RUNNER_SOURCE = os.path.join('generated_src', '_all_tests.c')
+UNIT_TEST_RUNNER_SOURCE = os.path.join(BUILD_ROOT_DIR, 'generated_src', '_all_tests.c')
 
 
 #-----------------------------------------------------------
@@ -47,6 +47,7 @@ class UnitTestsHost_BuildConfig:
     sources += [UNIT_TEST_RUNNER_SOURCE]
 
     objects = [os.path.join(obj_dir, x).replace('.c', '.o') for x in sources]
+
     depends = [x.replace('.o', '.d') for x in objects]
 
     exe_target = os.path.join(build_dir, 'ArduinoDue_blank-UnitTestHost.exe')
