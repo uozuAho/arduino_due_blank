@@ -72,6 +72,15 @@ def make_link_command(cfg, output_path, object_list):
     return ''.join([arg+' ' for arg in cmd_args])
 
 
+def get_header_dependency_dict(dep_file_list):
+    deps = {}
+    for dep_file in dep_file_list:
+        if os.path.isfile(dep_file):
+            temp_deps = doit_help.get_dependencies_from_file(dep_file)
+            deps.update(temp_deps)
+    return deps
+
+
 #-----------------------------------------------------------
 # Tasks
 
@@ -100,9 +109,12 @@ def task_create_build_dirs():
 
 def task_compile():
     cfg = UnitTestsHost_BuildConfig
+    dep_dict = get_header_dependency_dict(cfg.depends)
     for source in cfg.sources:
         target = os.path.join(cfg.obj_dir, source.replace('.c', '.o'))
         dependencies = [BUILD_ROOT_DIR_DUMMY_FILE] + [source]
+        if target in dep_dict:
+            dependencies += dep_dict[target]
         yield {
             'name': source,
             'actions': [make_compile_command(cfg, target, source)],
