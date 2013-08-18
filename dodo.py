@@ -1,5 +1,6 @@
 import os
-from doit_helpers import doit_help
+from doit_helpers import utilities as doit_utils
+from doit_helpers import cbuild
 
 
 #-----------------------------------------------------------
@@ -40,7 +41,7 @@ class UnitTestsHost_BuildConfig:
 
     linker = 'gcc'
 
-    sources = doit_help.find_files(['src', 'tests', 'test_harness', 'my_static_lib'],
+    sources = doit_utils.find_files(['src', 'tests', 'test_harness', 'my_static_lib'],
                                    exclude_patterns=['sketch.cpp'])
 
     # manually add auto-generated sources as they can't be found before building
@@ -77,7 +78,7 @@ def get_header_dependency_dict(dep_file_list):
     deps = {}
     for dep_file in dep_file_list:
         if os.path.isfile(dep_file):
-            temp_deps = doit_help.get_dependencies_from_file(dep_file)
+            temp_deps = cbuild.get_dependencies_from_file(dep_file)
             deps.update(temp_deps)
     return deps
 
@@ -89,7 +90,7 @@ def get_header_dependency_dict(dep_file_list):
 def task_generate_test_runner():
     "Generate test runner"
     return {
-        'actions': [(doit_help.create_dirs, [UNIT_TEST_RUNNER_SOURCE]),
+        'actions': [(doit_utils.create_dirs, [UNIT_TEST_RUNNER_SOURCE]),
                     'python '+TEST_RUNNER_GENERATOR+' tests -o '+UNIT_TEST_RUNNER_SOURCE],
         'targets': [UNIT_TEST_RUNNER_SOURCE],
         'clean': True
@@ -101,7 +102,7 @@ def task_create_build_dirs():
     cfg = UnitTestsHost_BuildConfig
 
     return {
-        'actions': [(doit_help.create_dirs, cfg.objects),
+        'actions': [(doit_utils.create_dirs, cfg.objects),
                     'echo "" > '+BUILD_ROOT_DIR_DUMMY_FILE],
         'targets': [BUILD_ROOT_DIR_DUMMY_FILE],
         'clean': True
