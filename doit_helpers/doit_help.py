@@ -7,12 +7,7 @@ RUN_TESTS = True
 
 
 def main():
-    # print _remove_newline_escapes('asdf2: blah \\\n foo \\\n bar')
-    with open('_all_tests.d') as infile:
-        test_str = infile.read()
-
-    # print test_str
-    print _remove_newline_escapes(test_str)
+    pass
 
 
 def find_files(paths, extensions=['.c'], exclude_patterns=[], abspath=False):
@@ -43,6 +38,19 @@ def find_files(paths, extensions=['.c'], exclude_patterns=[], abspath=False):
     if abspath:
         matches = [os.path.abspath(x) for x in matches]
     return matches
+
+
+def create_dirs(*paths):
+    """ Create any dirs specified in *paths. *paths can be
+        file and/or directory paths.
+    """
+    dirs_to_create = set([os.path.dirname(path) for path in paths])
+
+    for path in dirs_to_create:
+        try:
+            os.makedirs(path)
+        except os.error:
+            pass
 
 
 def get_dependencies_from_file(path):

@@ -1,20 +1,23 @@
 import os
 from doit_helpers import doit_help
 
-DOIT_CONFIG = {'default_tasks': ['link']}
 
-# Starting with unit test host build configuration
+#-----------------------------------------------------------
+# Constants
+
+DOIT_CONFIG = {'default_tasks': ['link']}
 
 BUILD_ROOT_DIR = 'doit_build'
 
-# ------------------------------------------------------
-# Test runner generator definitions
+# This dummy file is used to detect the presence of BUILD_ROOT_DIR
+BUILD_ROOT_DIR_DUMMY_FILE = os.path.join(BUILD_ROOT_DIR, '.dummy')
 
 TEST_RUNNER_GENERATOR = os.path.join('test_harness', 'Unity', 'scripts', 'makeTestRunner.py')
-UNIT_TEST_RUNNER_SOURCE = os.path.join('tests', '_all_tests.c')
+UNIT_TEST_RUNNER_SOURCE = os.path.join('generated_src', '_all_tests.c')
 
-# ------------------------------------------------------
-# Unit tests host build config
+
+#-----------------------------------------------------------
+# Build configurations
 
 
 class UnitTestsHost_BuildConfig:
@@ -39,6 +42,10 @@ class UnitTestsHost_BuildConfig:
 
     sources = doit_help.find_files(['src', 'tests', 'test_harness', 'my_static_lib'],
                                    exclude_patterns=['sketch.cpp'])
+
+    # manually add auto-generated sources as they can't be found before building
+    sources += [UNIT_TEST_RUNNER_SOURCE]
+
     objects = [os.path.join(obj_dir, x).replace('.c', '.o') for x in sources]
     depends = [x.replace('.o', '.d') for x in objects]
 
@@ -65,38 +72,37 @@ def make_link_command(cfg, output_path, object_list):
     return ''.join([arg+' ' for arg in cmd_args])
 
 
-# ------------------------------------------------------
-# Rules
+#-----------------------------------------------------------
+# Tasks
 
 
 def task_generate_test_runner():
     "Generate test runner"
     return {
-        'actions': ['python '+TEST_RUNNER_GENERATOR+' tests -o '+UNIT_TEST_RUNNER_SOURCE],
+        'actions': [(doit_help.create_dirs, [UNIT_TEST_RUNNER_SOURCE]),
+                    'python '+TEST_RUNNER_GENERATOR+' tests -o '+UNIT_TEST_RUNNER_SOURCE],
         'targets': [UNIT_TEST_RUNNER_SOURCE],
         'clean': True
     }
 
-# ----------------------------
-# Unit tests host build rules
 
-
-def task_link():
+def task_create_build_dirs():
+    "create build directory structure"
     cfg = UnitTestsHost_BuildConfig
+
     return {
-        'actions': [make_link_command(cfg, cfg.exe_target, cfg.objects)],
-        'file_dep': UnitTestsHost_BuildConfig.objects,
-        'targets': [cfg.exe_target],
+        'actions': [(doit_help.create_dirs, cfg.objects),
+                    'echo "" > '+BUILD_ROOT_DIR_DUMMY_FILE],
+        'targets': [BUILD_ROOT_DIR_DUMMY_FILE],
         'clean': True
     }
 
 
 def task_compile():
     cfg = UnitTestsHost_BuildConfig
-    dummy_file = os.path.join(cfg.obj_dir, 'dummy.txt')
     for source in cfg.sources:
         target = os.path.join(cfg.obj_dir, source.replace('.c', '.o'))
-        dependencies = [dummy_file] + [source]
+        dependencies = [BUILD_ROOT_DIR_DUMMY_FILE] + [source]
         yield {
             'name': source,
             'actions': [make_compile_command(cfg, target, source)],
@@ -106,25 +112,11 @@ def task_compile():
         }
 
 
-def create_build_dirs(*paths):
-    dirs_to_create = set([os.path.dirname(path) for path in paths])
-
-    for path in dirs_to_create:
-        try:
-            os.makedirs(path)
-        except os.error:
-            pass
-
-
-def task_create_build_dirs():
-    "create build directory structure"
+def task_link():
     cfg = UnitTestsHost_BuildConfig
-
-    dummy_file = os.path.join(cfg.obj_dir, 'dummy.txt')
-
     return {
-        'actions': [(create_build_dirs, cfg.objects),
-                    'echo "" > '+dummy_file],
-        'targets': [dummy_file],
+        'actions': [make_link_command(cfg, cfg.exe_target, cfg.objects)],
+        'file_dep': UnitTestsHost_BuildConfig.objects,
+        'targets': [cfg.exe_target],
         'clean': True
     }
