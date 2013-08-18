@@ -10,8 +10,10 @@ supported in Eclipse, using other build tools.
     - waf   - DONE
     - Scons
     - make  - DONE
+    - doit - DONE
 
   - Add a variant of the unit test host configuration, eg. with
     an extra printout or similar
+    - make - DONE
 
   - Add a build configuration for the Arduino platform
