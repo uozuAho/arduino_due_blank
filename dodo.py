@@ -10,6 +10,9 @@ from doit_build_configs import unit_tests_host
 
 # DOIT_CONFIG = {'default_tasks': ['link']}
 
+PROJECT_NAME = 'Arduino-due-blank'
+VERSION_STRING = '0.0.1'
+
 #-----------------------------------------------------------
 # Tasks
 
@@ -39,3 +42,10 @@ def task_compile():
     for cfg in all_configs.all_configs:
         for task in cbuild.get_compile_tasks(cfg):
             yield task
+
+
+def task_link():
+    for cfg in all_configs.all_configs:
+        exe_name = PROJECT_NAME+'-'+VERSION_STRING+'-'+cfg['name']+'.exe'
+        exe_path = os.path.join(cfg['build_dir'], exe_name)
+        yield cbuild.get_link_exe_task(cfg, exe_path)

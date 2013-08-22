@@ -74,16 +74,17 @@ def get_compile_tasks(cfg, generate_deps=False):
         _init_cfg_for_build(cfg)
 
     tasks = []
-    dep_dict = _get_header_dependency_dict(cfg['dependencies'])
+    if generate_deps:
+        dep_dict = _get_header_dependency_dict(cfg['dependencies'])
     for source in cfg['source_files']:
         target = _source_to_obj(source, cfg['build_dir'])
         dependencies = [source]
         if not generate_deps:
             dependencies += cfg['header_files']
-        if target in dep_dict:
+        elif target in dep_dict:
             dependencies += dep_dict[target]
         tasks.append({
-            'name': cfg['name']+source,
+            'name': cfg['name']+': '+source,
             'actions': [_get_gcc_compile_command(cfg, source, generate_deps)],
             'targets': [target],
             'file_dep': dependencies,
@@ -92,9 +93,17 @@ def get_compile_tasks(cfg, generate_deps=False):
     return tasks
 
 
-def get_link_tasks(cfg):
+def get_link_exe_task(cfg, target_path):
     if 'initialised' not in cfg:
         _init_cfg_for_build(cfg)
+
+    return {
+        'name': cfg['name'],
+        'actions': [_get_gcc_link_exe_command(cfg, target_path)],
+        'targets': [target_path],
+        'file_dep': cfg['objects'],
+        'clean': True
+    }
 
 
 def _init_cfg_for_build(cfg):
@@ -209,8 +218,10 @@ def _get_gcc_link_exe_command(cfg, target_path):
     cmd_args = [cfg['linker']]
     cmd_args += cfg['objects']
     cmd_args += ['-o', target_path]
-    cmd_args += ['-L'+d for d in cfg['linker_lib_dirs']]
-    cmd_args += ['-l'+x for x in cfg['linker_libs']]
+    if 'linker_lib_dirs' in cfg:
+        cmd_args += ['-L'+d for d in cfg['linker_lib_dirs']]
+    if 'linker_libs' in cfg:
+        cmd_args += ['-l'+x for x in cfg['linker_libs']]
     return ''.join([arg+' ' for arg in cmd_args])
 
 
