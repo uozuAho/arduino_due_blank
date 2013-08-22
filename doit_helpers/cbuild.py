@@ -230,6 +230,7 @@ def _get_gcc_compile_command(cfg, source, generate_deps=False):
 
 
 def _get_gcc_link_exe_command(cfg, target_path):
+    # TODO: support custom linker command
     if 'initialised' not in cfg:
         _init_cfg_for_build(cfg)
 
