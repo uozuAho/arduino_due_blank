@@ -52,6 +52,24 @@ def main():
     pass
 
 
+def get_config_as_string(cfg):
+    if 'initialised' not in cfg:
+        _init_cfg_for_build(cfg)
+
+    ret = '-----------------------------------------\n'
+    ret += 'C build configuration: '+cfg['name']+'\n'
+    ret += 'build directory:\n'
+    ret += '    '+cfg['build_dir']+'\n'
+    ret += 'source files:\n'
+    for source in cfg['source_files']:
+        ret += '    '+source + '\n'
+    ret += 'object files:\n'
+    for obj in cfg['objects']:
+        ret += '    '+obj + '\n'
+    ret += '-----------------------------------------\n'
+    return ret
+
+
 def get_makedirs_task(cfg):
     if 'initialised' not in cfg:
         _init_cfg_for_build(cfg)

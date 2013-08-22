@@ -3,7 +3,7 @@ import os
 # Root directory of the entire project
 # NOTE: This assumes the build script is run from
 # the directory above 'doit_build_configs'
-project_root = os.path.abspath('.')
+project_root = ''
 
 # All builds go under this directory
 build_root = os.path.join(project_root, 'doit_build')
