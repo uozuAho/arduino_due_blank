@@ -1,6 +1,13 @@
 plan
 ====
 
+next up
+-------
+ - finish doit_helpers/cbuild, use in dodo.py
+  - start writing tests now
+  - may need to use abs paths
+
+
 Incrementally add all build configurations currently
 supported in Eclipse, using other build tools.
 ---------------

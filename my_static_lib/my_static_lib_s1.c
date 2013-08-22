@@ -6,3 +6,4 @@ void MyStaticLib_vPrintTestMessage() {
     MY_STATIC_LIB_OUTPUT_CHAR('c');
     MY_STATIC_LIB_OUTPUT_CHAR('\n');
 }
+

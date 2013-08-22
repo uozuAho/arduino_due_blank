@@ -44,7 +44,11 @@ def create_dirs(*paths):
     """ Create any dirs specified in *paths. *paths can be
         file and/or directory paths.
     """
-    dirs_to_create = set([os.path.dirname(path) for path in paths])
+    if len(paths) == 1:
+        if type(paths[0]) == list:
+            dirs_to_create = set([os.path.dirname(path) for path in paths[0]])
+        else:
+            dirs_to_create = set([os.path.dirname(path) for path in paths])
 
     for path in dirs_to_create:
         try:
