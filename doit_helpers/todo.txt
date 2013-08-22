@@ -1,0 +1,5 @@
+bugs
+====
+
+- Can't parse dependency files that contain absolute windows paths
+ - ':' character in drive specification screws me up (eg. C:\)

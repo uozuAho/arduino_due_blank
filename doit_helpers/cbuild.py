@@ -78,9 +78,8 @@ def get_compile_tasks(cfg, generate_deps=False):
     for source in cfg['source_files']:
         target = _source_to_obj(source, cfg['build_dir'])
         dependencies = [source]
-        # TODO: depend on all headers
-        # if not generate_deps:
-        #     dependencies +=
+        if not generate_deps:
+            dependencies += cfg['header_files']
         if target in dep_dict:
             dependencies += dep_dict[target]
         tasks.append({
@@ -104,6 +103,7 @@ def _init_cfg_for_build(cfg):
 
     _build_source_file_list(cfg)
     _build_obj_and_dep_lists(cfg)
+    _build_header_file_list(cfg)
 
     cfg['initialised'] = True
 
@@ -130,6 +130,18 @@ def _build_obj_and_dep_lists(cfg):
 
     cfg['objects'] = [_source_to_obj(src, cfg['build_dir']) for src in cfg['source_files']]
     cfg['dependencies'] = [_source_to_dep(src, cfg['build_dir']) for src in cfg['source_files']]
+
+
+def _build_header_file_list(cfg):
+    """ Build a list of header files found in the configuration's
+        source file directories
+    """
+    headers = utilities.find_files(cfg['source_dirs'], ['.h', '.hpp'])
+
+    if 'header_files' in cfg:
+        cfg['header_files'] += headers
+    else:
+        cfg['header_files'] = headers
 
 
 def _source_to_obj(source_path, build_dir):
