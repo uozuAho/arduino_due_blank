@@ -1,9 +1,9 @@
-from doit_build_configs_2 import build_globals
-from doit_build_configs_2 import utilities
+from doit_build_configs import build_globals
+from doit_build_configs import utilities
 
-from doit_build_configs_2 import unit_tests_host
-from doit_build_configs_2 import unit_tests_host_variant
-from doit_build_configs_2 import production_debug
+from doit_build_configs import unit_tests_host
+from doit_build_configs import unit_tests_host_variant
+from doit_build_configs import production_debug
 
 
 def task_generate_test_runner():

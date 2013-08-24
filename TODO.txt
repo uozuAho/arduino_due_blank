@@ -1,26 +1,9 @@
 plan
 ====
 
-next up
--------
- - finish doit_helpers/cbuild, use in dodo.py
-  - start writing tests now
-  - may need to use abs paths
+- Try opening project as makefile project in Eclipse,
+  replacing 'make' command with 'doit'
 
+- Fix make dependency parser (doit_helpers)
 
-Incrementally add all build configurations currently
-supported in Eclipse, using other build tools.
----------------
-
-  - Add build tool files to build unit test host configuration.
-    - Cmake - DONE
-    - waf   - DONE
-    - Scons
-    - make  - DONE
-    - doit - DONE
-
-  - Add a variant of the unit test host configuration, eg. with
-    an extra printout or similar
-    - make - DONE
-
-  - Add a build configuration for the Arduino platform
+- Automate unit test build & run
