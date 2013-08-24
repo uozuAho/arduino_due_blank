@@ -1,8 +1,9 @@
 plan
 ====
 
-- Try opening project as makefile project in Eclipse,
-  replacing 'make' command with 'doit'
+- Rename project - no longer Eclipse CDT-based
+ - To use Eclipse CDT, import existing code as makefile project,
+   change make command to 'doit.bat', clear 'all' arg.
 
 - Fix make dependency parser (doit_helpers)
 
