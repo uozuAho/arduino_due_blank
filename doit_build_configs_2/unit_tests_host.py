@@ -35,17 +35,16 @@ COMPILER_INCLUDE_DIRS = [
 
 LINKER = 'gcc'
 
-SOURCES = utilities.find_files(['src', 'tests', 'test_harness', 'my_static_lib'],
-                               exclude_patterns=['sketch.cpp'])
+SOURCE_DIRS = ['src', 'tests', 'test_harness', 'my_static_lib']
 
-HEADERS = utilities.find_files(['src', 'tests', 'test_harness', 'my_static_lib'],
-                               extensions=['.h'],
-                               exclude_patterns=['sketch.cpp'])
+SOURCES = utilities.find_files(SOURCE_DIRS, extensions=['.c'])
+
+HEADERS = utilities.find_files(SOURCE_DIRS, extensions=['.h'])
 
 # manually add auto-generated sources as they can't be found before building
 SOURCES += [build_globals.UNIT_TEST_RUNNER_SOURCE]
 
-OBJECTS = [build_globals.source_to_obj(source, OBJ_DIR) for source in SOURCES]
+OBJECTS = [utilities.source_to_obj(source, OBJ_DIR) for source in SOURCES]
 
 EXE_TARGET_NAME = build_globals.get_exe_target_name(NAME, 'exe')
 
@@ -66,7 +65,7 @@ def get_compile_command(source_path):
     cmd_args += ['-D'+d for d in COMPILER_DEFINITIONS]
     cmd_args += ['-I'+i for i in COMPILER_INCLUDE_DIRS]
     cmd_args += COMPILER_FLAGS + ['-c']
-    cmd_args += ['-o', build_globals.source_to_obj(source_path, OBJ_DIR)]
+    cmd_args += ['-o', utilities.source_to_obj(source_path, OBJ_DIR)]
     cmd_args += [source_path]
     return arg_list_to_command_string(cmd_args)
 
@@ -98,7 +97,7 @@ def get_compile_tasks():
     tasks = [get_build_dir_task()]
 
     for source in SOURCES:
-        target = build_globals.source_to_obj(source, OBJ_DIR)
+        target = utilities.source_to_obj(source, OBJ_DIR)
         dependencies = [BUILD_DIR_DUMMY] + [source] + HEADERS
         tasks.append({
             'name': source.replace('.c', '.o'),

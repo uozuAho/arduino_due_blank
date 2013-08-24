@@ -43,7 +43,3 @@ def from_build_root(*args):
 
 def get_exe_target_name(name, extension):
     return PROJECT_NAME+'-'+VERSION_STRING+'-'+name+'.'+extension
-
-
-def source_to_obj(source_path, dest_dir):
-    return os.path.join(dest_dir, source_path.replace('.c', '.o'))

@@ -1,7 +1,7 @@
 import os
 
 
-def find_files(paths, extensions=[], exclude_patterns=[], abspath=False):
+def find_files(paths, extensions, exclude_patterns=[], abspath=False):
     """ Return a list of files in the given path(s) with the given
         file extensions. Searches all subdirectories.
 
@@ -46,3 +46,11 @@ def create_dirs(*paths):
             os.makedirs(path)
         except os.error:
             pass
+
+
+def source_to_obj(source_path, dest_dir):
+    """ Return the path of the object file to be built from the
+        given source file
+    """
+    source_no_ext = os.path.splitext(source_path)[0]
+    return os.path.join(dest_dir, source_no_ext+'.o')

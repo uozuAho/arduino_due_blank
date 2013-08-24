@@ -3,6 +3,7 @@ from doit_build_configs_2 import utilities
 
 from doit_build_configs_2 import unit_tests_host
 from doit_build_configs_2 import unit_tests_host_variant
+from doit_build_configs_2 import production_debug
 
 
 def task_generate_test_runner():
@@ -32,6 +33,14 @@ def task_unit_tests_host():
 def task_unit_tests_host_variant():
     tasks = unit_tests_host_variant.get_compile_tasks()
     tasks.append(unit_tests_host_variant.get_link_task())
+
+    for task in tasks:
+        yield task
+
+
+def task_production_debug():
+    tasks = production_debug.get_compile_tasks()
+    tasks.append(production_debug.get_link_task())
 
     for task in tasks:
         yield task
