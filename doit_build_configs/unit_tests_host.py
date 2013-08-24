@@ -117,3 +117,11 @@ def get_link_task():
         'targets': [EXE_TARGET],
         'clean': True
     }
+
+
+def get_run_test_task():
+    return {
+        'name': 'run tests',
+        'actions': [EXE_TARGET],
+        'file_dep': [EXE_TARGET],
+    }

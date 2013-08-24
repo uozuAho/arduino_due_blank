@@ -1,9 +1,9 @@
 plan
 ====
 
-- Rename project - no longer Eclipse CDT-based
- - To use Eclipse CDT, import existing code as makefile project,
-   change make command to 'doit.bat', clear 'all' arg.
+- Rename project - no longer Eclipse CDT-dependent
+
+- Unity error parser?
 
 - Fix make dependency parser (doit_helpers)
 
