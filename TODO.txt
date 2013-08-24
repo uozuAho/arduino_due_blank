@@ -3,8 +3,6 @@ plan
 
 - Rename project - no longer Eclipse CDT-dependent
 
-- Unity error parser?
-
 - Fix make dependency parser (doit_helpers)
 
 - Automate unit test build & run
