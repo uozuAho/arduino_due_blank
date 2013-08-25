@@ -2,10 +2,14 @@ Eclipse error parsers
 =====================
 
 These are a godsend for extracting  & quickly navigating to
-warnings & error messages from console output. To add a parser
-to Eclipse, go to Window --> Preferences --> C/C++ --> Build -->
-Settings. Click on the 'Error Parsers' tab and then click the
-'Add...' button.
+warnings & error messages from console output. Unforunately
+I can't add them to the project so you have to add them
+manually.
+
+To add a console parser to Eclipse, go to Window --> Preferences
+--> C/C++ --> Build --> Settings. Click on the 'Error Parsers'
+tab and then click the 'Add...' button.
+
 
 Add as many or as few as you like:
 

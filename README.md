@@ -2,9 +2,11 @@ arduino_due_blank
 =================
 
 This is a project to be used as a base for any Arduino Due
-software. It includes a pre-built arduino core for the Arduino Due,
-a pre-built Atmel library for the Due's processor and all necessary
-header files for those libraries.
+software. It includes:
+- pre-built arduino core library & headers
+- pre-built Atmel library & headers
+- Unity unit test framework
+- some example source, tests & build configurations
 
 Essential tools
 ---------------
@@ -37,6 +39,27 @@ Before you can build
   in my case C:\Python27\Scripts
 - Finally, modify the upload.sh/upload.bat script to suit your system. These
   scripts upload the project to the Arduino Due.
+
+
+Building
+========
+
+Simply run `doit` from the project's root directory. The PC-based unit
+test configuration will be built & run. The example tests contain
+intentional errors, so expect some error output!
+
+
+Using Eclipse CDT
+=================
+
+If you don't already know, Eclipse is great for:
+- Code navigation, editing and refactoring
+- Error/warning message parsing
+
+I've included an Eclipse project file, allowing quick import into Eclipse.
+The project is configured to call doit rather than make. I've also included
+Unity message parsers allowing quick navigation to failing tests. See
+eclipse_helpers/error
 
 
 Alternatives to using Arduino SDK
