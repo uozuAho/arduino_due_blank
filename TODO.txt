@@ -1,8 +1,0 @@
-plan
-====
-
-- Rename project - no longer Eclipse CDT-dependent
-
-- Fix make dependency parser (doit_helpers)
-
-- Automate unit test build & run

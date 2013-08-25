@@ -3,11 +3,5 @@
 *.o
 *.exe
 *.d
-.lock-waf*
 .doit*
-Debug
 build
-doit_build
-make_build
-waf_build
-waf-*
