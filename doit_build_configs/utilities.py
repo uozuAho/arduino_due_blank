@@ -1,4 +1,8 @@
 import os
+import sys
+
+sys.path.append('..')
+from doit_helpers import dependency_parser
 
 
 def find_files(paths, extensions, exclude_patterns=[], abspath=False):
@@ -53,4 +57,26 @@ def source_to_obj(source_path, dest_dir):
         given source file
     """
     source_no_ext = os.path.splitext(source_path)[0]
-    return os.path.join(dest_dir, source_no_ext+'.o')
+    return os.path.join(dest_dir, source_no_ext + '.o')
+
+
+def source_to_dep(source_path, dest_dir):
+    """ Return the path of the dependency file that will be generated
+        when compiling the source_path
+    """
+    source_no_ext = os.path.splitext(source_path)[0]
+    return os.path.join(dest_dir, source_no_ext + '.d')
+
+
+def get_obj_dependencies(obj_path):
+    """ Get object file dependencies from a gcc-generated
+        dependency file for the given object
+    """
+    depfile = obj_path.replace('.o', '.d')
+    if os.path.isfile(depfile):
+        deps = dependency_parser.get_gcc_depfile_deps(depfile)
+        if obj_path not in deps:
+            print 'warning:', obj_path, 'not in', deps
+        else:
+            return deps[obj_path]
+    return None

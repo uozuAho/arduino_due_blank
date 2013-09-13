@@ -53,7 +53,8 @@ C_COMPILER_FLAGS = [
     '-ffunction-sections',
     '-fdata-sections',
     '-nostdlib',
-    '--param max-inline-insns-single=500'
+    '--param max-inline-insns-single=500',
+    '-MMD'
 ]
 
 C_COMPILER_INCLUDE_DIRS = [
@@ -101,7 +102,8 @@ CPP_COMPILER_FLAGS = [
     '-ffunction-sections',
     '-fdata-sections',
     '-nostdlib',
-    '--param max-inline-insns-single=500'
+    '--param max-inline-insns-single=500',
+    '-MMD'
 ]
 
 CPP_COMPILER_INCLUDE_DIRS = [

@@ -21,7 +21,7 @@ OBJ_DIR = os.path.join(BUILD_DIR, 'obj')
 
 COMPILER = 'gcc'
 COMPILER_DEFINITIONS = ['TARGET_HOST']
-COMPILER_FLAGS = ['-O0', '-g3', '-Wall']
+COMPILER_FLAGS = ['-O0', '-g3', '-Wall', '-MMD']
 COMPILER_INCLUDE_DIRS = [
     build_globals.from_proj_root('arduino_core', 'include'),
     build_globals.from_proj_root('arduino_core', 'variants', 'arduino_due_x'),
@@ -97,12 +97,18 @@ def get_compile_tasks():
     tasks = [get_build_dir_task()]
 
     for source in SOURCES:
-        target = utilities.source_to_obj(source, OBJ_DIR)
-        dependencies = [BUILD_DIR_DUMMY] + [source] + HEADERS
+        obj = utilities.source_to_obj(source, OBJ_DIR)
+        dep = utilities.source_to_dep(source, OBJ_DIR)
+        dependencies = [BUILD_DIR_DUMMY]
+        depfile_deps = utilities.get_obj_dependencies(obj)
+        if depfile_deps is None:
+            dependencies += [source] + HEADERS
+        else:
+            dependencies += depfile_deps
         tasks.append({
             'name': source.replace('.c', '.o'),
             'actions': [get_compile_command(source)],
-            'targets': [target],
+            'targets': [obj, dep],
             'file_dep': dependencies,
             'clean': True
         })
